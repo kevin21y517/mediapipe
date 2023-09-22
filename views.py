@@ -58,14 +58,14 @@ def process_pose_estimation(cap, run_time):
             out.write(image)
 
             if results.pose_landmarks:
-                key_point,actual_coordinates=log_key_point(results,image)
+                key_point,actual_coordinates,absolute_coordinates=log_key_point(results,image)
 
                 current_time = time.time()
                 output_delay = 3.0
 
                 if current_time - output_timer > output_delay:
                     formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
-                    frame_data=record_point(key_point,formatted_datetime)
+                    frame_data=record_point(key_point,formatted_datetime,absolute_coordinates)
                     pose_data.append(frame_data)
                     output_timer = current_time
 
@@ -114,52 +114,51 @@ def log_key_point(results,image):
         prev_left_knee_coords = (int(left_knee.x * image_width), int(left_knee.y * image_height))
         prev_right_knee_coords = (int(right_knee.x * image_width), int(right_knee.y * image_height))
 
+        your_z_max=1
+        your_z_min=-1
+
+
+
+
+        # 计算其他关键点的相对偏移值并映射到 -1 到 1 的范围
+        nose_landmark_x = (nose_landmark.x * image_width - nose_landmark.x * image_width) / (image_width / 2)
+        nose_landmark_y = (nose_landmark.y * image_height - nose_landmark.y * image_height) / (image_height / 2)
+        nose_landmark_z = (nose_landmark.z - nose_landmark.z) / (your_z_max - your_z_min)
+
+        left_shoulder_x = (left_shoulder.x * image_width - nose_landmark.x * image_width) / (image_width / 2)
+        left_shoulder_y = (nose_landmark.y * image_height - left_shoulder.y * image_height) / (image_height / 2)
+        left_shoulder_z = (left_shoulder.z - nose_landmark.z) / (your_z_max - your_z_min)
+
+        right_shoulder_x = (right_shoulder.x * image_width - nose_landmark.x * image_width) / (image_width / 2)
+        right_shoulder_y = (nose_landmark.y * image_height - right_shoulder.y * image_height) / (image_height / 2)
+        right_shoulder_z = (right_shoulder.z - nose_landmark.z) / (your_z_max - your_z_min)
+
+        left_knee_x = (left_knee.x * image_width - nose_landmark.x * image_width) / (image_width / 2)
+        left_knee_y = (nose_landmark.y * image_height - left_knee.y * image_height) / (image_height / 2)
+        left_knee_z = (left_knee.z - nose_landmark.z) / (your_z_max - your_z_min)
+
+        right_knee_x = (right_knee.x * image_width - nose_landmark.x * image_width) / (image_width / 2)
+        right_knee_y = (nose_landmark.y * image_height - right_knee.y * image_height) / (image_height / 2)
+        right_knee_z = (right_knee.z - nose_landmark.z) / (your_z_max - your_z_min)
+
         key_point=(left_shoulder,right_shoulder,left_knee,right_knee,nose_landmark,image_height, image_width)
         actual_coordinates=(prev_nose_coords,prev_left_shoulder_coords,prev_right_shoulder_coords,prev_left_knee_coords,prev_right_knee_coords)
+        absolute_coordinates=(nose_landmark_x,nose_landmark_y,nose_landmark_z,left_shoulder_x,left_shoulder_y,left_shoulder_z,right_shoulder_x,right_shoulder_y,right_shoulder_z,left_knee_x,left_knee_y,left_knee_z,right_knee_x,right_knee_y,right_knee_z)
 
-        return(key_point,actual_coordinates)
+        return(key_point,actual_coordinates,absolute_coordinates)
 
 
-def record_point(key_point,formatted_datetime):
+def record_point(key_point,formatted_datetime,absolute_coordinates):
     left_shoulder,right_shoulder,left_knee,right_knee,nose_landmark,image_height, image_width=key_point
-
-    your_z_max=1
-    your_z_min=-1
-
-    # 计算相对于鼻子的偏移值，并将坐标平移到 -1 到 1 的范围
-    x_offset = nose_landmark.x * image_width - image_width / 2
-    y_offset = image_height / 2 - nose_landmark.y * image_height
-    z_offset = nose_landmark.z - nose_landmark.z  # 鼻子坐标作为原点
-
-    # 将坐标映射到 -1 到 1 的范围
-    x_normalized = (x_offset / (image_width / 2))
-    y_normalized = (y_offset / (image_height / 2))
-    z_normalized = (z_offset / (your_z_max - your_z_min))  # 请替换成实际的 z 范围
-
-    # 计算其他关键点的相对偏移值并映射到 -1 到 1 的范围
-    left_shoulder_x = (left_shoulder.x * image_width - nose_landmark.x * image_width) / (image_width / 2)
-    left_shoulder_y = (nose_landmark.y * image_height - left_shoulder.y * image_height) / (image_height / 2)
-    left_shoulder_z = (left_shoulder.z - nose_landmark.z) / (your_z_max - your_z_min)
-
-    right_shoulder_x = (right_shoulder.x * image_width - nose_landmark.x * image_width) / (image_width / 2)
-    right_shoulder_y = (nose_landmark.y * image_height - right_shoulder.y * image_height) / (image_height / 2)
-    right_shoulder_z = (right_shoulder.z - nose_landmark.z) / (your_z_max - your_z_min)
-
-    left_knee_x = (left_knee.x * image_width - nose_landmark.x * image_width) / (image_width / 2)
-    left_knee_y = (nose_landmark.y * image_height - left_knee.y * image_height) / (image_height / 2)
-    left_knee_z = (left_knee.z - nose_landmark.z) / (your_z_max - your_z_min)
-
-    right_knee_x = (right_knee.x * image_width - nose_landmark.x * image_width) / (image_width / 2)
-    right_knee_y = (nose_landmark.y * image_height - right_knee.y * image_height) / (image_height / 2)
-    right_knee_z = (right_knee.z - nose_landmark.z) / (your_z_max - your_z_min)
+    nose_landmark_x,nose_landmark_y,nose_landmark_z,left_shoulder_x,left_shoulder_y,left_shoulder_z,right_shoulder_x,right_shoulder_y,right_shoulder_z,left_knee_x,left_knee_y,left_knee_z,right_knee_x,right_knee_y,right_knee_z=absolute_coordinates
 
     # 将当前帧的数据添加到列表中
     frame_data = {
         "日期": formatted_datetime,
         "鼻子": {
-            "X": round(x_normalized, 2),
-            "Y": round(y_normalized, 2),
-            "Z": round(z_normalized, 2)
+            "X": round(nose_landmark_x, 2),
+            "Y": round(nose_landmark_y, 2),
+            "Z": round(nose_landmark_z, 2)
         },
         "左肩膀": {
             "X": round(left_shoulder_x, 2),

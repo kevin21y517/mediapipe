@@ -123,33 +123,63 @@ def log_key_point(results,image):
 def record_point(key_point,formatted_datetime):
     left_shoulder,right_shoulder,left_knee,right_knee,nose_landmark,image_height, image_width=key_point
 
+    your_z_max=1
+    your_z_min=-1
+
+    # 计算相对于鼻子的偏移值，并将坐标平移到 -1 到 1 的范围
+    x_offset = nose_landmark.x * image_width - image_width / 2
+    y_offset = image_height / 2 - nose_landmark.y * image_height
+    z_offset = nose_landmark.z - nose_landmark.z  # 鼻子坐标作为原点
+
+    # 将坐标映射到 -1 到 1 的范围
+    x_normalized = (x_offset / (image_width / 2))
+    y_normalized = (y_offset / (image_height / 2))
+    z_normalized = (z_offset / (your_z_max - your_z_min))  # 请替换成实际的 z 范围
+
+    # 计算其他关键点的相对偏移值并映射到 -1 到 1 的范围
+    left_shoulder_x = (left_shoulder.x * image_width - nose_landmark.x * image_width) / (image_width / 2)
+    left_shoulder_y = (nose_landmark.y * image_height - left_shoulder.y * image_height) / (image_height / 2)
+    left_shoulder_z = (left_shoulder.z - nose_landmark.z) / (your_z_max - your_z_min)
+
+    right_shoulder_x = (right_shoulder.x * image_width - nose_landmark.x * image_width) / (image_width / 2)
+    right_shoulder_y = (nose_landmark.y * image_height - right_shoulder.y * image_height) / (image_height / 2)
+    right_shoulder_z = (right_shoulder.z - nose_landmark.z) / (your_z_max - your_z_min)
+
+    left_knee_x = (left_knee.x * image_width - nose_landmark.x * image_width) / (image_width / 2)
+    left_knee_y = (nose_landmark.y * image_height - left_knee.y * image_height) / (image_height / 2)
+    left_knee_z = (left_knee.z - nose_landmark.z) / (your_z_max - your_z_min)
+
+    right_knee_x = (right_knee.x * image_width - nose_landmark.x * image_width) / (image_width / 2)
+    right_knee_y = (nose_landmark.y * image_height - right_knee.y * image_height) / (image_height / 2)
+    right_knee_z = (right_knee.z - nose_landmark.z) / (your_z_max - your_z_min)
+
     # 将当前帧的数据添加到列表中
     frame_data = {
-        "日期":formatted_datetime,
+        "日期": formatted_datetime,
         "鼻子": {
-            "X": round(nose_landmark.x * image_width, 2),
-            "Y": round(nose_landmark.y * image_height, 2),
-            "Z": round(nose_landmark.z, 2)
+            "X": round(x_normalized, 2),
+            "Y": round(y_normalized, 2),
+            "Z": round(z_normalized, 2)
         },
         "左肩膀": {
-            "X": round(left_shoulder.x * image_width, 2),
-            "Y": round(left_shoulder.y * image_height, 2),
-            "Z": round(left_shoulder.z, 2)
+            "X": round(left_shoulder_x, 2),
+            "Y": round(left_shoulder_y, 2),
+            "Z": round(left_shoulder_z, 2)
         },
         "右肩膀": {
-            "X": round(right_shoulder.x * image_width, 2),
-            "Y": round(right_shoulder.y * image_height, 2),
-            "Z": round(right_shoulder.z, 2)
+            "X": round(right_shoulder_x, 2),
+            "Y": round(right_shoulder_y, 2),
+            "Z": round(right_shoulder_z, 2)
         },
         "左膝盖": {
-            "X": round(left_knee.x * image_width, 2),
-            "Y": round(left_knee.y * image_height, 2),
-            "Z": round(left_knee.z, 2)
+            "X": round(left_knee_x, 2),
+            "Y": round(left_knee_y, 2),
+            "Z": round(left_knee_z, 2)
         },
         "右膝盖": {
-            "X": round(right_knee.x * image_width, 2),
-            "Y": round(right_knee.y * image_height, 2),
-            "Z": round(right_knee.z, 2)
+            "X": round(right_knee_x, 2),
+            "Y": round(right_knee_y, 2),
+            "Z": round(right_knee_z, 2)
         }
         # 添加其他坐标点
     }

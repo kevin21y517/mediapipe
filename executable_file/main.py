@@ -1,4 +1,4 @@
-from executable_file.views import *
+from views import *
 import cv2
 
 

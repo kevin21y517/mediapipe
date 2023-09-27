@@ -65,7 +65,7 @@ def process_pose_estimation(cap, run_time):
 
                 if current_time - output_timer > output_delay:
                     formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
-                    frame_data=record_point(key_point,formatted_datetime,absolute_coordinates)
+                    frame_data=record_point(formatted_datetime,absolute_coordinates)
                     pose_data.append(frame_data)
                     output_timer = current_time
 
@@ -105,26 +105,113 @@ def log_key_point(results,image):
 
         left_shoulder = results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER]
         right_shoulder = results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_SHOULDER]
+        left_thumb = results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_THUMB]
+        right_thumb = results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_THUMB]
+        left_hip = results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_HIP]
+        right_hip = results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_HIP]
         left_knee = results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_KNEE]
         right_knee = results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_KNEE]
         nose_landmark = results.pose_landmarks.landmark[mp_pose.PoseLandmark.NOSE]
+        right_foot = results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_FOOT_INDEX]
+        left_foot = results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_FOOT_INDEX]
+
+
+        # 计算新原点的坐标，即左髋和右髋坐标的平均值
+        origin_x = (left_hip.x + right_hip.x)/2.0
+        origin_y = (left_hip.y + right_hip.y)/2.0
+        origin_z = (left_hip.z + right_hip.z)/2.0
+
+        # 新原点的坐标即为新的原点
+        origin = (origin_x, origin_y, origin_z)
+
         image_height, image_width, _ = image.shape
+        # nose_coordinates = (((nose_landmark.x * image_width - nose_landmark.x * image_width) / (image_width / 2)), ((nose_landmark.y * image_height - nose_landmark.y * image_height) / (image_height / 2)),((nose_landmark.z - nose_landmark.z) / (z_max - z_min)))
+        # left_shoulder_coordinates = (((left_shoulder.x * image_width - nose_landmark.x * image_width) / (image_width / 2)), ((nose_landmark.y * image_height - left_shoulder.y * image_height) / (image_height / 2)),((left_shoulder.z - nose_landmark.z) / (z_max - z_min)))
+        # right_shoulder_coordinates = (((right_shoulder.x * image_width - nose_landmark.x * image_width) / (image_width / 2)), ((nose_landmark.y * image_height - right_shoulder.y * image_height) / (image_height / 2)),((right_shoulder.z - nose_landmark.z) / (z_max - z_min)))
+        # left_thumb_coordinates = (((left_thumb.x * image_width - nose_landmark.x * image_width) / (image_width / 2)), ((nose_landmark.y * image_height - left_thumb.y * image_height) / (image_height / 2)),((left_thumb.z - nose_landmark.z) / (z_max - z_min)))
+        # right_thumb_coordinates = (((right_thumb.x * image_width - nose_landmark.x * image_width) / (image_width / 2)), ((nose_landmark.y * image_height - right_thumb.y * image_height) / (image_height / 2)),((right_thumb.z - nose_landmark.z) / (z_max - z_min)))
+        # left_hip_coordinates = (((left_hip.x * image_width - nose_landmark.x * image_width) / (image_width / 2)), ((nose_landmark.y * image_height - left_hip.y * image_height) / (image_height / 2)),((left_hip.z - nose_landmark.z) / (z_max - z_min)))
+        # right_hip_coordinates = (((right_hip.x * image_width - nose_landmark.x * image_width) / (image_width / 2)), ((nose_landmark.y * image_height - right_hip.y * image_height) / (image_height / 2)),((right_hip.z - nose_landmark.z) / (z_max - z_min)))
+        # left_knee_coordinates = (((left_knee.x * image_width - nose_landmark.x * image_width) / (image_width / 2)), ((nose_landmark.y * image_height - left_knee.y * image_height) / (image_height / 2)),((left_knee.z - nose_landmark.z) / (z_max - z_min)))
+        # right_knee_coordinates = (((right_knee.x * image_width - nose_landmark.x * image_width) / (image_width / 2)), ((nose_landmark.y * image_height - right_knee.y * image_height) / (image_height / 2)),((right_knee.z - nose_landmark.z) / (z_max - z_min)))
+        # right_foot_coordinates = (((right_foot.x * image_width - nose_landmark.x * image_width) / (image_width / 2)), ((nose_landmark.y * image_height - right_foot.y * image_height) / (image_height / 2)),((right_foot.z - nose_landmark.z) / (z_max - z_min)))
+        # left_foot_coordinates = (((left_foot.x * image_width - nose_landmark.x * image_width) / (image_width / 2)), ((nose_landmark.y * image_height - left_foot.y * image_height) / (image_height / 2)),((left_foot.z - nose_landmark.z) / (z_max - z_min)))
 
-        nose_coordinates = (((nose_landmark.x * image_width - nose_landmark.x * image_width) / (image_width / 2)), ((nose_landmark.y * image_height - nose_landmark.y * image_height) / (image_height / 2)),((nose_landmark.z - nose_landmark.z) / (z_max - z_min)))
-        left_shoulder_coordinates = (((left_shoulder.x * image_width - nose_landmark.x * image_width) / (image_width / 2)), ((nose_landmark.y * image_height - left_shoulder.y * image_height) / (image_height / 2)),((left_shoulder.z - nose_landmark.z) / (z_max - z_min)))
-        right_shoulder_coordinates = (((right_shoulder.x * image_width - nose_landmark.x * image_width) / (image_width / 2)), ((nose_landmark.y * image_height - right_shoulder.y * image_height) / (image_height / 2)),((right_shoulder.z - nose_landmark.z) / (z_max - z_min)))
-        left_knee_coordinates = (((left_knee.x * image_width - nose_landmark.x * image_width) / (image_width / 2)), ((nose_landmark.y * image_height - left_knee.y * image_height) / (image_height / 2)),((left_knee.z - nose_landmark.z) / (z_max - z_min)))
-        right_knee_coordinates = (((right_knee.x * image_width - nose_landmark.x * image_width) / (image_width / 2)), ((nose_landmark.y * image_height - right_knee.y * image_height) / (image_height / 2)),((right_knee.z - nose_landmark.z) / (z_max - z_min)))
+        # 计算鼻子的歸一化坐標
+        nose_coordinates = (
+            (nose_landmark.x - origin_x),
+            (nose_landmark.y - origin_y),
+            (nose_landmark.z - origin_z)
+        )
+        # 计算左肩膀的歸一化坐標
+        left_shoulder_coordinates = (
+            (left_shoulder.x - origin_x),
+            (left_shoulder.y - origin_y),
+            (left_shoulder.z - origin_z)
+        )
+        # 计算右肩膀的歸一化坐標
+        right_shoulder_coordinates = (
+            (right_shoulder.x - origin_x),
+            (right_shoulder.y - origin_y),
+            (right_shoulder.z - origin_z)
+        )
+        # 计算左大拇指的歸一化坐標
+        left_thumb_coordinates = (
+            (left_thumb.x - origin_x),
+            (left_thumb.y - origin_y),
+            (left_thumb.z - origin_z)
+        )
+        # 计算右大拇指的歸一化坐標
+        right_thumb_coordinates = (
+            (right_thumb.x - origin_x),
+            (right_thumb.y - origin_y),
+            (right_thumb.z - origin_z)
+        )
+        # 计算左臀部的歸一化坐標
+        left_hip_coordinates = (
+            (left_hip.x - origin_x),
+            (left_hip.y - origin_y),
+            (left_hip.z - origin_z)
+        )
+        # 计算右臀部的歸一化坐標
+        right_hip_coordinates = (
+            (right_hip.x - origin_x),
+            (right_hip.y - origin_y),
+            (right_hip.z - origin_z)
+        )
+        # 计算左膝盖的歸一化坐標
+        left_knee_coordinates = (
+            (left_knee.x - origin_x),
+            (left_knee.y - origin_y),
+            (left_knee.z - origin_z)
+        )
+        # 计算右膝盖的歸一化坐標
+        right_knee_coordinates = (
+            (right_knee.x - origin_x),
+            (right_knee.y - origin_y),
+            (right_knee.z - origin_z)
+        )
+        # 计算右腳的歸一化坐標
+        right_foot_coordinates = (
+            (right_foot.x - origin_x),
+            (right_foot.y - origin_y),
+            (right_foot.z - origin_z)
+        )
+        # 计算左腳的歸一化坐標
+        left_foot_coordinates = (
+            (left_foot.x - origin_x),
+            (left_foot.y - origin_y),
+            (left_foot.z - origin_z)
+        )
 
-        key_point=(left_shoulder,right_shoulder,left_knee,right_knee,nose_landmark,image_height, image_width)
-        absolute_coordinates=(nose_coordinates,left_shoulder_coordinates,right_shoulder_coordinates,left_knee_coordinates,right_knee_coordinates)
+        key_point=(left_shoulder,right_shoulder,left_thumb,right_thumb,left_hip,right_hip,left_knee,right_knee,nose_landmark,right_foot,left_foot,image_height,image_width)
+        absolute_coordinates=(nose_coordinates,left_shoulder_coordinates,right_shoulder_coordinates,left_thumb_coordinates,right_thumb_coordinates,left_hip_coordinates,right_hip_coordinates,left_knee_coordinates,right_knee_coordinates,right_foot_coordinates,left_foot_coordinates)
 
         return(key_point,absolute_coordinates)
 
 
-def record_point(key_point,formatted_datetime,absolute_coordinates):
-    left_shoulder,right_shoulder,left_knee,right_knee,nose_landmark,image_height, image_width=key_point
-    nose_coordinates,left_shoulder_coordinates,right_shoulder_coordinates,left_knee_coordinates,right_knee_coordinates=absolute_coordinates
+def record_point(formatted_datetime,absolute_coordinates):
+    nose_coordinates,left_shoulder_coordinates,right_shoulder_coordinates,left_thumb_coordinates,right_thumb_coordinates,left_hip_coordinates,right_hip_coordinates,left_knee_coordinates,right_knee_coordinates,right_foot_coordinates,left_foot_coordinates=absolute_coordinates
 
     # 将当前帧的数据添加到列表中
     frame_data = {
@@ -144,6 +231,26 @@ def record_point(key_point,formatted_datetime,absolute_coordinates):
             "Y": round(right_shoulder_coordinates[1], 2),
             "Z": round(right_shoulder_coordinates[2], 2)
         },
+        "左大拇指": {
+            "X": round(left_thumb_coordinates[0], 2),
+            "Y": round(left_thumb_coordinates[1], 2),
+            "Z": round(left_thumb_coordinates[2], 2)
+        },
+        "右大拇指": {
+            "X": round(right_thumb_coordinates[0], 2),
+            "Y": round(right_thumb_coordinates[1], 2),
+            "Z": round(right_thumb_coordinates[2], 2)
+        },
+        "左臀部": {
+            "X": round(left_hip_coordinates[0], 2),
+            "Y": round(left_hip_coordinates[1], 2),
+            "Z": round(left_hip_coordinates[2], 2)
+        },
+        "右臀部": {
+            "X": round(right_hip_coordinates[0], 2),
+            "Y": round(right_hip_coordinates[1], 2),
+            "Z": round(right_hip_coordinates[2], 2)
+        },
         "左膝盖": {
             "X": round(left_knee_coordinates[0], 2),
             "Y": round(left_knee_coordinates[1], 2),
@@ -153,21 +260,37 @@ def record_point(key_point,formatted_datetime,absolute_coordinates):
             "X": round(right_knee_coordinates[0], 2),
             "Y": round(right_knee_coordinates[1], 2),
             "Z": round(right_knee_coordinates[2], 2)
-        }
+        },
+        "左腳": {
+            "X": round(left_foot_coordinates[0], 2),
+            "Y": round(left_foot_coordinates[1], 2),
+            "Z": round(left_foot_coordinates[2], 2)
+        },
+        "右腳": {
+            "X": round(right_foot_coordinates[0], 2),
+            "Y": round(right_foot_coordinates[1], 2),
+            "Z": round(right_foot_coordinates[2], 2)
+        },
         # 添加其他坐标点
     }
     return frame_data
 
 
 def image_point(image,key_point,absolute_coordinates):
-    left_shoulder,right_shoulder,left_knee,right_knee,nose_landmark,image_height, image_width=key_point
-    nose_coordinates,left_shoulder_coordinates,right_shoulder_coordinates,left_knee_coordinates,right_knee_coordinates=absolute_coordinates
+    left_shoulder,right_shoulder,left_thumb,right_thumb,left_hip,right_hip,left_knee,right_knee,nose_landmark,right_foot,left_foot,image_height,image_width=key_point
+    nose_coordinates,left_shoulder_coordinates,right_shoulder_coordinates,left_thumb_coordinates,right_thumb_coordinates,left_hip_coordinates,right_hip_coordinates,left_knee_coordinates,right_knee_coordinates,right_foot_coordinates,left_foot_coordinates=absolute_coordinates
 
     prev_nose_coordinates = (int(nose_landmark.x * image_width), int(nose_landmark.y * image_height))
     prev_left_shoulder_coordinates = (int(left_shoulder.x * image_width), int(left_shoulder.y * image_height))
     prev_right_shoulder_coordinates = (int(right_shoulder.x * image_width), int(right_shoulder.y * image_height))
+    prev_left_thumb_coordinates = (int(left_thumb.x * image_width), int(left_thumb.y * image_height))
+    prev_right_thumb_coordinates = (int(right_thumb.x * image_width), int(right_thumb.y * image_height))
+    prev_left_hip_coordinates = (int(left_hip.x * image_width), int(left_hip.y * image_height))
+    prev_right_hip_coordinates = (int(right_hip.x * image_width), int(right_hip.y * image_height))
     prev_left_knee_coordinates = (int(left_knee.x * image_width), int(left_knee.y * image_height))
     prev_right_knee_coordinates = (int(right_knee.x * image_width), int(right_knee.y * image_height))
+    prev_left_foot_coordinates = (int(left_foot.x * image_width), int(left_foot.y * image_height))
+    prev_right_foot_coordinates = (int(right_foot.x * image_width), int(right_foot.y * image_height))
 
     if nose_coordinates is not None:
         cv2.putText(image, f'Nose (X,Y,Z): ({nose_coordinates[0]:.2f}, {nose_coordinates[1]:.2f}, {nose_coordinates[2]:.2f})',
@@ -176,10 +299,22 @@ def image_point(image,key_point,absolute_coordinates):
                         (prev_left_shoulder_coordinates[0] + 10, prev_left_shoulder_coordinates[1] + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 165, 255), 1)
         cv2.putText(image, f'Right Shoulder (X,Y,Z): ({right_shoulder_coordinates[0]:.2f}, {right_shoulder_coordinates[1]:.2f}, {right_shoulder_coordinates[2]:.2f})',
                         (prev_right_shoulder_coordinates[0] + 10, prev_right_shoulder_coordinates[1] + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 165, 255), 1)
+        cv2.putText(image, f'Left Thumb (X,Y,Z): ({left_thumb_coordinates[0]:.2f}, {left_thumb_coordinates[1]:.2f}, {left_thumb_coordinates[2]:.2f})',
+                        (prev_left_thumb_coordinates[0] + 10, prev_left_thumb_coordinates[1] + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 165, 255), 1)
+        cv2.putText(image, f'Right Thumb (X,Y,Z): ({right_thumb_coordinates[0]:.2f}, {right_thumb_coordinates[1]:.2f}, {right_thumb_coordinates[2]:.2f})',
+                        (prev_right_thumb_coordinates[0] + 10, prev_right_thumb_coordinates[1] + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 165, 255), 1)
+        cv2.putText(image, f'Left Hip (X,Y,Z): ({left_hip_coordinates[0]:.2f}, {left_hip_coordinates[1]:.2f}, {left_hip_coordinates[2]:.2f})',
+                        (prev_left_hip_coordinates[0] + 10, prev_left_hip_coordinates[1] + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 165, 255), 1)
+        cv2.putText(image, f'Right Hip (X,Y,Z): ({right_hip_coordinates[0]:.2f}, {right_hip_coordinates[1]:.2f}, {right_hip_coordinates[2]:.2f})',
+                        (prev_right_hip_coordinates[0] + 10, prev_right_hip_coordinates[1] + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 165, 255), 1)
         cv2.putText(image, f'Left Knee (X,Y,Z): ({left_knee_coordinates[0]:.2f}, {left_knee_coordinates[1]:.2f}, {left_knee_coordinates[2]:.2f})',
                         (prev_left_knee_coordinates[0] + 10, prev_left_knee_coordinates[1] + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 165, 255), 1)
         cv2.putText(image, f'Right Knee (X,Y,Z): ({right_knee_coordinates[0]:.2f}, {right_knee_coordinates[1]:.2f}, {right_knee_coordinates[2]:.2f})',
                         (prev_right_knee_coordinates[0] + 10, prev_right_knee_coordinates[1] + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 165, 255), 1)
+        cv2.putText(image, f'Left Foot (X,Y,Z): ({left_foot_coordinates[0]:.2f}, {left_foot_coordinates[1]:.2f}, {left_foot_coordinates[2]:.2f})',
+                        (prev_left_foot_coordinates[0] + 10, prev_left_foot_coordinates[1] + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 165, 255), 1)
+        cv2.putText(image, f'Right Foot (X,Y,Z): ({right_foot_coordinates[0]:.2f}, {right_foot_coordinates[1]:.2f}, {right_foot_coordinates[2]:.2f})',
+                        (prev_right_foot_coordinates[0] + 10, prev_right_foot_coordinates[1] + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 165, 255), 1)
         cv2.imshow('MediaPipe Pose', image)
 
 

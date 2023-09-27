@@ -3,7 +3,7 @@ import cv2
 
 
 if __name__ == "__main__":
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(0 )
 
     # 检查摄像头是否成功打开
     if not cap.isOpened():
@@ -20,7 +20,7 @@ if __name__ == "__main__":
 
             # 如果按下空格键，则执行姿势估计
             if cv2.waitKey(1) == 32:  # 空格键的ASCII码是32
-                run_time=30
+                run_time=300
                 cv2.destroyWindow('Camera')
                 process_pose_estimation(cap, run_time)
             if cv2.waitKey(1) == 27:

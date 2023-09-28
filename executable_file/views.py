@@ -125,17 +125,6 @@ def log_key_point(results,image):
         origin = (origin_x, origin_y, origin_z)
 
         image_height, image_width, _ = image.shape
-        # nose_coordinates = (((nose_landmark.x * image_width - nose_landmark.x * image_width) / (image_width / 2)), ((nose_landmark.y * image_height - nose_landmark.y * image_height) / (image_height / 2)),((nose_landmark.z - nose_landmark.z) / (z_max - z_min)))
-        # left_shoulder_coordinates = (((left_shoulder.x * image_width - nose_landmark.x * image_width) / (image_width / 2)), ((nose_landmark.y * image_height - left_shoulder.y * image_height) / (image_height / 2)),((left_shoulder.z - nose_landmark.z) / (z_max - z_min)))
-        # right_shoulder_coordinates = (((right_shoulder.x * image_width - nose_landmark.x * image_width) / (image_width / 2)), ((nose_landmark.y * image_height - right_shoulder.y * image_height) / (image_height / 2)),((right_shoulder.z - nose_landmark.z) / (z_max - z_min)))
-        # left_thumb_coordinates = (((left_thumb.x * image_width - nose_landmark.x * image_width) / (image_width / 2)), ((nose_landmark.y * image_height - left_thumb.y * image_height) / (image_height / 2)),((left_thumb.z - nose_landmark.z) / (z_max - z_min)))
-        # right_thumb_coordinates = (((right_thumb.x * image_width - nose_landmark.x * image_width) / (image_width / 2)), ((nose_landmark.y * image_height - right_thumb.y * image_height) / (image_height / 2)),((right_thumb.z - nose_landmark.z) / (z_max - z_min)))
-        # left_hip_coordinates = (((left_hip.x * image_width - nose_landmark.x * image_width) / (image_width / 2)), ((nose_landmark.y * image_height - left_hip.y * image_height) / (image_height / 2)),((left_hip.z - nose_landmark.z) / (z_max - z_min)))
-        # right_hip_coordinates = (((right_hip.x * image_width - nose_landmark.x * image_width) / (image_width / 2)), ((nose_landmark.y * image_height - right_hip.y * image_height) / (image_height / 2)),((right_hip.z - nose_landmark.z) / (z_max - z_min)))
-        # left_knee_coordinates = (((left_knee.x * image_width - nose_landmark.x * image_width) / (image_width / 2)), ((nose_landmark.y * image_height - left_knee.y * image_height) / (image_height / 2)),((left_knee.z - nose_landmark.z) / (z_max - z_min)))
-        # right_knee_coordinates = (((right_knee.x * image_width - nose_landmark.x * image_width) / (image_width / 2)), ((nose_landmark.y * image_height - right_knee.y * image_height) / (image_height / 2)),((right_knee.z - nose_landmark.z) / (z_max - z_min)))
-        # right_foot_coordinates = (((right_foot.x * image_width - nose_landmark.x * image_width) / (image_width / 2)), ((nose_landmark.y * image_height - right_foot.y * image_height) / (image_height / 2)),((right_foot.z - nose_landmark.z) / (z_max - z_min)))
-        # left_foot_coordinates = (((left_foot.x * image_width - nose_landmark.x * image_width) / (image_width / 2)), ((nose_landmark.y * image_height - left_foot.y * image_height) / (image_height / 2)),((left_foot.z - nose_landmark.z) / (z_max - z_min)))
 
         # 计算鼻子的歸一化坐標
         nose_coordinates = (
@@ -157,14 +146,14 @@ def log_key_point(results,image):
         )
         # 计算左大拇指的歸一化坐標
         left_thumb_coordinates = (
-            (left_thumb.x - origin_x),
-            (left_thumb.y - origin_y),
+            (left_thumb.x ),
+            (left_thumb.y ),
             (left_thumb.z - origin_z)
         )
         # 计算右大拇指的歸一化坐標
         right_thumb_coordinates = (
-            (right_thumb.x - origin_x),
-            (right_thumb.y - origin_y),
+            (right_thumb.x ),
+            (right_thumb.y ),
             (right_thumb.z - origin_z)
         )
         # 计算左臀部的歸一化坐標

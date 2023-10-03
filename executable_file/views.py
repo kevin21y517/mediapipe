@@ -129,68 +129,68 @@ def log_key_point(results,image):
         # 计算鼻子的歸一化坐標
         nose_coordinates = (
             (nose_landmark.x - origin_x),
-            (nose_landmark.y - origin_y),
-            (nose_landmark.z - origin_z)
+            (origin_y - nose_landmark.y),
+            (nose_landmark.z)
         )
         # 计算左肩膀的歸一化坐標
         left_shoulder_coordinates = (
             (left_shoulder.x - origin_x),
-            (left_shoulder.y - origin_y),
-            (left_shoulder.z - origin_z)
+            (origin_y - left_shoulder.y),
+            (left_shoulder.z)
         )
         # 计算右肩膀的歸一化坐標
         right_shoulder_coordinates = (
             (right_shoulder.x - origin_x),
-            (right_shoulder.y - origin_y),
-            (right_shoulder.z - origin_z)
+            (origin_y - right_shoulder.y),
+            (right_shoulder.z)
         )
         # 计算左大拇指的歸一化坐標
         left_thumb_coordinates = (
-            (left_thumb.x ),
-            (left_thumb.y ),
-            (left_thumb.z - origin_z)
+            (left_thumb.x - origin_x),
+            (origin_y - left_thumb.y),
+            (left_thumb.z)
         )
         # 计算右大拇指的歸一化坐標
         right_thumb_coordinates = (
-            (right_thumb.x ),
-            (right_thumb.y ),
-            (right_thumb.z - origin_z)
+            (right_thumb.x - origin_x),
+            (origin_y - right_thumb.y),
+            (right_thumb.z)
         )
         # 计算左臀部的歸一化坐標
         left_hip_coordinates = (
             (left_hip.x - origin_x),
-            (left_hip.y - origin_y),
-            (left_hip.z - origin_z)
+            (origin_y - left_hip.y),
+            (left_hip.z)
         )
         # 计算右臀部的歸一化坐標
         right_hip_coordinates = (
             (right_hip.x - origin_x),
-            (right_hip.y - origin_y),
-            (right_hip.z - origin_z)
+            (origin_y - right_hip.y),
+            (right_hip.z)
         )
         # 计算左膝盖的歸一化坐標
         left_knee_coordinates = (
             (left_knee.x - origin_x),
-            (left_knee.y - origin_y),
-            (left_knee.z - origin_z)
+            (origin_y - left_knee.y),
+            (left_knee.z)
         )
         # 计算右膝盖的歸一化坐標
         right_knee_coordinates = (
             (right_knee.x - origin_x),
-            (right_knee.y - origin_y),
-            (right_knee.z - origin_z)
+            (origin_y - right_knee.y),
+            (right_knee.z)
         )
         # 计算右腳的歸一化坐標
         right_foot_coordinates = (
             (right_foot.x - origin_x),
-            (right_foot.y - origin_y),
-            (right_foot.z - origin_z)
+            (origin_y - right_foot.y),
+            (right_foot.z)
         )
         # 计算左腳的歸一化坐標
         left_foot_coordinates = (
             (left_foot.x - origin_x),
-            (left_foot.y - origin_y),
-            (left_foot.z - origin_z)
+            (origin_y - left_foot.y),
+            (left_foot.z)
         )
 
         key_point=(left_shoulder,right_shoulder,left_thumb,right_thumb,left_hip,right_hip,left_knee,right_knee,nose_landmark,right_foot,left_foot,image_height,image_width)
@@ -393,3 +393,71 @@ def json_data(formatted_time_for_filename):
     output_filename = os.path.join(json_folder, f"pose_data_{formatted_time_for_filename}.json")
     with open(output_filename, "w", encoding='utf-8') as json_file:
         json.dump(pose_data, json_file, indent=4, ensure_ascii=False)
+
+
+def detectPose(image, pose, display=True):
+    '''
+    This function performs pose detection on an image.
+    Args:
+        image: The input image with a prominent person whose pose landmarks needs to be detected.
+        pose: The pose setup function required to perform the pose detection.
+        display: A boolean value that is if set to true the function displays the original input image, the resultant image,
+                 and the pose landmarks in 3D plot and returns nothing.
+    Returns:
+        output_image: The input image with the detected pose landmarks drawn.
+        landmarks: A list of detected landmarks converted into their original scale.
+    '''
+
+    # Create a copy of the input image.
+    output_image = image.copy()
+
+    # Convert the image from BGR into RGB format.
+    imageRGB = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+    # Perform the Pose Detection.
+    results = pose.process(imageRGB)
+
+    # Retrieve the height and width of the input image.
+    height, width, _ = image.shape
+
+    # Initialize a list to store the detected landmarks.
+    landmarks = []
+
+    # Check if any landmarks are detected.
+    if results.pose_landmarks:
+        key_point,absolute_coordinates=log_key_point(results,image)
+        # Draw Pose landmarks on the output image.
+        mp_drawing.draw_landmarks(image=output_image, landmark_list=results.pose_landmarks,
+                                  connections=mp_pose.POSE_CONNECTIONS)
+
+        # Iterate over the detected landmarks.
+        for landmark in results.pose_landmarks.landmark:
+
+            # Append the landmark into the list.
+            landmarks.append((int(landmark.x * width), int(landmark.y * height),
+                                  (landmark.z * width)))
+
+    # Check if the original input image and the resultant image are specified to be displayed.
+    if display:
+
+        # Display the original input image and the resultant image.
+        # plt.figure(figsize=[22,22])
+        # plt.subplot(121);plt.imshow(image[:,:,::-1]);plt.title("Original Image");plt.axis('off');
+        # plt.subplot(122);plt.imshow(output_image[:,:,::-1]);plt.title("Output Image");plt.axis('off');
+
+        current_datetime = datetime.datetime.now()
+        formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
+        frame_data=record_point(formatted_datetime,absolute_coordinates)
+        pose_data.append(frame_data)
+        formatted_time_for_filename = current_datetime.strftime("%Y-%m-%d_%H%M%S")
+        json_data(formatted_time_for_filename)
+
+        # Also Plot the Pose landmarks in 3D.
+        # mp_drawing.plot_landmarks(results.pose_world_landmarks, mp_pose.POSE_CONNECTIONS)
+
+    # Otherwise
+    else:
+
+        # Return the output image and the found landmarks.
+        return output_image, landmarks
+

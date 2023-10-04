@@ -460,4 +460,3 @@ def detectPose(image, pose, display=True):
 
         # Return the output image and the found landmarks.
         return output_image, landmarks
-

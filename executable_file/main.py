@@ -23,5 +23,5 @@ else:
                 break
     
     # 釋放資源，關閉攝像頭和視窗
-    cap.release()
+    cap.release() 
     cv2.destroyAllWindows()

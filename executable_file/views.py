@@ -18,6 +18,7 @@ prev_right_shoulder_coords = None
 prev_left_knee_coords = None
 prev_right_knee_coords = None
 
+
 fig = plt.figure()
 ax = fig.add_subplot(121)
 ax_3d = fig.add_subplot(122, projection='3d')
@@ -114,6 +115,7 @@ def log_key_point(results,image):
         nose_landmark = results.pose_landmarks.landmark[mp_pose.PoseLandmark.NOSE]
         right_foot = results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_FOOT_INDEX]
         left_foot = results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_FOOT_INDEX]
+        
 
 
         # 计算新原点的坐标，即左髋和右髋坐标的平均值
@@ -383,14 +385,14 @@ def three_dimensional_model(image,results,ax,ax_3d):
 
 def json_data(formatted_time_for_filename):
     # 定义要保存 JSON 文件的文件夹路径
-    json_folder = "json"
+    json_folder = "D:/Kevin_mediapipe/mediapipe/json"
 
     # 确保文件夹存在，如果不存在就创建它
     if not os.path.exists(json_folder):
         os.makedirs(json_folder)
 
     # 创建完整的文件路径
-    output_filename = os.path.join(json_folder, f"pose_data_{formatted_time_for_filename}.json")
+    output_filename = os.path.join(json_folder,f"pose_data_{formatted_time_for_filename}.json")
     with open(output_filename, "w", encoding='utf-8') as json_file:
         json.dump(pose_data, json_file, indent=4, ensure_ascii=False)
 

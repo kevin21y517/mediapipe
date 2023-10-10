@@ -30,6 +30,7 @@ class frame_datas():
                             (prev_right_shoulder_coordinates[0] + 10, prev_right_shoulder_coordinates[1] + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 165, 255), 1)
             cv2.imshow('MediaPipe Pose', self.point_set.image)
 
+
     def record_point(self):
         self.frame_data = {}  # 为每一帧创建一个新的字典
 
@@ -59,6 +60,7 @@ class frame_datas():
         # },
         # }
         return self.frame_data
+
 
     def landmark_to_dict(self,landmark):
         return {

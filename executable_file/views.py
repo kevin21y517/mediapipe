@@ -441,9 +441,9 @@ def detectPose(image, pose, display=True):
     if display:
 
         # Display the original input image and the resultant image.
-        # plt.figure(figsize=[22,22])
-        # plt.subplot(121);plt.imshow(image[:,:,::-1]);plt.title("Original Image");plt.axis('off');
-        # plt.subplot(122);plt.imshow(output_image[:,:,::-1]);plt.title("Output Image");plt.axis('off');
+        plt.figure(figsize=[22,22])
+        plt.subplot(121);plt.imshow(image[:,:,::-1]);plt.title("Original Image");plt.axis('off');
+        plt.subplot(122);plt.imshow(output_image[:,:,::-1]);plt.title("Output Image");plt.axis('off');
 
         current_datetime = datetime.datetime.now()
         formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
@@ -453,7 +453,7 @@ def detectPose(image, pose, display=True):
         json_data(formatted_time_for_filename)
 
         # Also Plot the Pose landmarks in 3D.
-        # mp_drawing.plot_landmarks(results.pose_world_landmarks, mp_pose.POSE_CONNECTIONS)
+        mp_drawing.plot_landmarks(results.pose_world_landmarks, mp_pose.POSE_CONNECTIONS)
 
     # Otherwise
     else:

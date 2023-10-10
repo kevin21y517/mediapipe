@@ -33,7 +33,7 @@ class frame_datas():
     def record_point(self):
         self.frame_data = {}  # 为每一帧创建一个新的字典
 
-        for i in range(20):  # 用你的实际关键点数量替换2
+        for i in range(32):  # 用你的实际关键点数量替换2
             landmark_name = self.point_set.mp_pose.PoseLandmark(i).name
             landmark_value = self.point_set.results.pose_landmarks.landmark[self.point_set.mp_pose.PoseLandmark(i).value]
             self.frame_data[landmark_name] = self.landmark_to_dict(landmark_value)

@@ -10,7 +10,7 @@ class implement():
     def __init__(self):
         self.PoseDetector = mp_set()
         self.point_set = p_set()
-        self.frame_data = frame_datas()
+        self.frame_datas = frame_datas()
 
         self.pose_data = []
         self.point_data = None
@@ -25,15 +25,15 @@ class implement():
     def process_pose_estimation(self):
         self.out =  self.save_video()
         while self.PoseDetector.cap.isOpened():
-            self.image = self.frame_data.point_set_import()
+            self.image = self.frame_datas.point_set_import()
             #frame_data矩陣寫入
-            self.frame = self.frame_data.record_point()
+            self.frame = self.frame_datas.record_point()
             self.pose_data.append(self.frame)
             # self.pose_data.append(self.point_data)
             # 将帧写入输出视频
             self.out.write(self.image)
             # self.video_point.image_point()
-            self.frame_data.image_point()
+            self.frame_datas.image_point()
 
 
             if cv2.waitKey(1) == 27 or (self.start_time > 100 and time.time()
@@ -72,3 +72,5 @@ class implement():
         output_filename = os.path.join(json_folder, f"pose_data.json")
         with open(output_filename, "w", encoding='utf-8') as json_file:
             json.dump(self.pose_data, json_file, indent=4, ensure_ascii=False)
+
+

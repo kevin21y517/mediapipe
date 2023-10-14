@@ -18,10 +18,6 @@ prev_right_shoulder_coords = None
 prev_left_knee_coords = None
 prev_right_knee_coords = None
 
-<<<<<<< HEAD
-
-=======
->>>>>>> kevin
 fig = plt.figure()
 ax = fig.add_subplot(121)
 ax_3d = fig.add_subplot(122, projection='3d')

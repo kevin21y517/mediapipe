@@ -18,10 +18,7 @@ prev_right_shoulder_coords = None
 prev_left_knee_coords = None
 prev_right_knee_coords = None
 
-<<<<<<< HEAD
 
-=======
->>>>>>> main
 fig = plt.figure()
 ax = fig.add_subplot(121)
 ax_3d = fig.add_subplot(122, projection='3d')
@@ -62,33 +59,21 @@ def process_pose_estimation(cap, run_time):
             out.write(image)
 
             if results.pose_landmarks:
-<<<<<<< HEAD
                 key_point,absolute_coordinates=log_key_point(results,image)
-=======
-                key_point,actual_coordinates=log_key_point(results,image)
->>>>>>> main
 
                 current_time = time.time()
                 output_delay = 3.0
 
                 if current_time - output_timer > output_delay:
                     formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
-<<<<<<< HEAD
                     frame_data=record_point(formatted_datetime,absolute_coordinates)
-=======
-                    frame_data=record_point(key_point,formatted_datetime)
->>>>>>> main
                     pose_data.append(frame_data)
                     output_timer = current_time
 
 
             if results.pose_landmarks:
                 three_dimensional_model(image,results,ax,ax_3d)
-<<<<<<< HEAD
                 image_point(image,key_point,absolute_coordinates)
-=======
-                image_point(image,key_point,actual_coordinates)
->>>>>>> main
 
 
 
@@ -116,7 +101,6 @@ def save_video(formatted_time_for_filename):
 
 
 def log_key_point(results,image):
-<<<<<<< HEAD
         z_max=1
         z_min=-1
 
@@ -219,66 +203,11 @@ def log_key_point(results,image):
 
 def record_point(formatted_datetime,absolute_coordinates):
     nose_coordinates,left_shoulder_coordinates,right_shoulder_coordinates,left_thumb_coordinates,right_thumb_coordinates,left_hip_coordinates,right_hip_coordinates,left_knee_coordinates,right_knee_coordinates,right_foot_coordinates,left_foot_coordinates=absolute_coordinates
-=======
-
-        left_shoulder = results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER]
-        right_shoulder = results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_SHOULDER]
-        left_knee = results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_KNEE]
-        right_knee = results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_KNEE]
-        nose_landmark = results.pose_landmarks.landmark[mp_pose.PoseLandmark.NOSE]
-        image_height, image_width, _ = image.shape
-
-        prev_nose_coords = (int(nose_landmark.x * image_width), int(nose_landmark.y * image_height))
-        prev_left_shoulder_coords = (int(left_shoulder.x * image_width), int(left_shoulder.y * image_height))
-        prev_right_shoulder_coords = (int(right_shoulder.x * image_width), int(right_shoulder.y * image_height))
-        prev_left_knee_coords = (int(left_knee.x * image_width), int(left_knee.y * image_height))
-        prev_right_knee_coords = (int(right_knee.x * image_width), int(right_knee.y * image_height))
-
-        key_point=(left_shoulder,right_shoulder,left_knee,right_knee,nose_landmark,image_height, image_width)
-        actual_coordinates=(prev_nose_coords,prev_left_shoulder_coords,prev_right_shoulder_coords,prev_left_knee_coords,prev_right_knee_coords)
-
-        return(key_point,actual_coordinates)
-
-
-def record_point(key_point,formatted_datetime):
-    left_shoulder,right_shoulder,left_knee,right_knee,nose_landmark,image_height, image_width=key_point
-
-    your_z_max=1
-    your_z_min=-1
-
-    # 计算相对于鼻子的偏移值，并将坐标平移到 -1 到 1 的范围
-    x_offset = nose_landmark.x * image_width - image_width / 2
-    y_offset = image_height / 2 - nose_landmark.y * image_height
-    z_offset = nose_landmark.z - nose_landmark.z  # 鼻子坐标作为原点
-
-    # 将坐标映射到 -1 到 1 的范围
-    x_normalized = (x_offset / (image_width / 2))
-    y_normalized = (y_offset / (image_height / 2))
-    z_normalized = (z_offset / (your_z_max - your_z_min))  # 请替换成实际的 z 范围
-
-    # 计算其他关键点的相对偏移值并映射到 -1 到 1 的范围
-    left_shoulder_x = (left_shoulder.x * image_width - nose_landmark.x * image_width) / (image_width / 2)
-    left_shoulder_y = (nose_landmark.y * image_height - left_shoulder.y * image_height) / (image_height / 2)
-    left_shoulder_z = (left_shoulder.z - nose_landmark.z) / (your_z_max - your_z_min)
-
-    right_shoulder_x = (right_shoulder.x * image_width - nose_landmark.x * image_width) / (image_width / 2)
-    right_shoulder_y = (nose_landmark.y * image_height - right_shoulder.y * image_height) / (image_height / 2)
-    right_shoulder_z = (right_shoulder.z - nose_landmark.z) / (your_z_max - your_z_min)
-
-    left_knee_x = (left_knee.x * image_width - nose_landmark.x * image_width) / (image_width / 2)
-    left_knee_y = (nose_landmark.y * image_height - left_knee.y * image_height) / (image_height / 2)
-    left_knee_z = (left_knee.z - nose_landmark.z) / (your_z_max - your_z_min)
-
-    right_knee_x = (right_knee.x * image_width - nose_landmark.x * image_width) / (image_width / 2)
-    right_knee_y = (nose_landmark.y * image_height - right_knee.y * image_height) / (image_height / 2)
-    right_knee_z = (right_knee.z - nose_landmark.z) / (your_z_max - your_z_min)
->>>>>>> main
 
     # 将当前帧的数据添加到列表中
     frame_data = {
         "日期": formatted_datetime,
         "鼻子": {
-<<<<<<< HEAD
             "X": round(nose_coordinates[0], 2),
             "Y": round(nose_coordinates[1], 2),
             "Z": round(nose_coordinates[2], 2)
@@ -333,38 +262,11 @@ def record_point(key_point,formatted_datetime):
             "Y": round(right_foot_coordinates[1], 2),
             "Z": round(right_foot_coordinates[2], 2)
         },
-=======
-            "X": round(x_normalized, 2),
-            "Y": round(y_normalized, 2),
-            "Z": round(z_normalized, 2)
-        },
-        "左肩膀": {
-            "X": round(left_shoulder_x, 2),
-            "Y": round(left_shoulder_y, 2),
-            "Z": round(left_shoulder_z, 2)
-        },
-        "右肩膀": {
-            "X": round(right_shoulder_x, 2),
-            "Y": round(right_shoulder_y, 2),
-            "Z": round(right_shoulder_z, 2)
-        },
-        "左膝盖": {
-            "X": round(left_knee_x, 2),
-            "Y": round(left_knee_y, 2),
-            "Z": round(left_knee_z, 2)
-        },
-        "右膝盖": {
-            "X": round(right_knee_x, 2),
-            "Y": round(right_knee_y, 2),
-            "Z": round(right_knee_z, 2)
-        }
->>>>>>> main
         # 添加其他坐标点
     }
     return frame_data
 
 
-<<<<<<< HEAD
 def image_point(image,key_point,absolute_coordinates):
     left_shoulder,right_shoulder,left_thumb,right_thumb,left_hip,right_hip,left_knee,right_knee,nose_landmark,right_foot,left_foot,image_height,image_width=key_point
     nose_coordinates,left_shoulder_coordinates,right_shoulder_coordinates,left_thumb_coordinates,right_thumb_coordinates,left_hip_coordinates,right_hip_coordinates,left_knee_coordinates,right_knee_coordinates,right_foot_coordinates,left_foot_coordinates=absolute_coordinates
@@ -404,23 +306,6 @@ def image_point(image,key_point,absolute_coordinates):
                         (prev_left_foot_coordinates[0] + 10, prev_left_foot_coordinates[1] + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 165, 255), 1)
         cv2.putText(image, f'Right Foot (X,Y,Z): ({right_foot_coordinates[0]:.2f}, {right_foot_coordinates[1]:.2f}, {right_foot_coordinates[2]:.2f})',
                         (prev_right_foot_coordinates[0] + 10, prev_right_foot_coordinates[1] + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 165, 255), 1)
-=======
-def image_point(image,key_point,actual_coordinates):
-    left_shoulder,right_shoulder,left_knee,right_knee,nose_landmark,image_height, image_width=key_point
-    prev_nose_coords,prev_left_shoulder_coords,prev_right_shoulder_coords,prev_left_knee_coords,prev_right_knee_coords=actual_coordinates
-
-    if prev_nose_coords is not None:
-        cv2.putText(image, f'Nose (X,Y,Z): ({prev_nose_coords[0]}, {prev_nose_coords[1]}, {nose_landmark.z:.3f})',
-                        (prev_nose_coords[0] + 10, prev_nose_coords[1] + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 165, 255), 1)
-        cv2.putText(image, f'Left Shoulder (X,Y,Z): ({prev_left_shoulder_coords[0]}, {prev_left_shoulder_coords[1]}, {left_shoulder.z:.3f})',
-                        (prev_left_shoulder_coords[0] + 10, prev_left_shoulder_coords[1] + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 165, 255), 1)
-        cv2.putText(image, f'Right Shoulder (X,Y,Z): ({prev_right_shoulder_coords[0]}, {prev_right_shoulder_coords[1]}, {right_shoulder.z:.3f})',
-                        (prev_right_shoulder_coords[0] + 10, prev_right_shoulder_coords[1] + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 165, 255), 1)
-        cv2.putText(image, f'Left Knee (X,Y,Z): ({prev_left_knee_coords[0]}, {prev_left_knee_coords[1]}, {left_knee.z:.3f})',
-                        (prev_left_knee_coords[0] + 10, prev_left_knee_coords[1] + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 165, 255), 1)
-        cv2.putText(image, f'Right Knee (X,Y,Z): ({prev_right_knee_coords[0]}, {prev_right_knee_coords[1]}, {right_knee.z:.3f})',
-                        (prev_right_knee_coords[0] + 10, prev_right_knee_coords[1] + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 165, 255), 1)
->>>>>>> main
         cv2.imshow('MediaPipe Pose', image)
 
 
@@ -500,18 +385,13 @@ def three_dimensional_model(image,results,ax,ax_3d):
 
 def json_data(formatted_time_for_filename):
     # 定义要保存 JSON 文件的文件夹路径
-<<<<<<< HEAD
     json_folder = "D:/Kevin_mediapipe/mediapipe/json"
-=======
-    json_folder = "json"
->>>>>>> main
 
     # 确保文件夹存在，如果不存在就创建它
     if not os.path.exists(json_folder):
         os.makedirs(json_folder)
 
     # 创建完整的文件路径
-<<<<<<< HEAD
     output_filename = os.path.join(json_folder,f"pose_data_{formatted_time_for_filename}.json")
     with open(output_filename, "w", encoding='utf-8') as json_file:
         json.dump(pose_data, json_file, indent=4, ensure_ascii=False)
@@ -583,8 +463,3 @@ def detectPose(image, pose, display=True):
         # Return the output image and the found landmarks.
         return output_image, landmarks
 
-=======
-    output_filename = os.path.join(json_folder, f"pose_data_{formatted_time_for_filename}.json")
-    with open(output_filename, "w", encoding='utf-8') as json_file:
-        json.dump(pose_data, json_file, indent=4, ensure_ascii=False)
->>>>>>> main

@@ -8,13 +8,17 @@ import os
 
 class implement():
     def __init__(self):
-        self.PoseDetector = mp_set()
+        self.mp_set = mp_set()
         self.point_set = p_set()
         self.frame_datas = frame_datas()
 
         self.pose_data = []
         self.point_data = None
         self.image = None
+        self.results = None
+        self.new_results = None
+        self.mp_pose =  None
+
         # self.run_time = config_data["mediapipe"]["run_time"]
         self.run_time = 30
         self.start_time = time.time()
@@ -24,16 +28,23 @@ class implement():
 
     def process_pose_estimation(self):
         self.out =  self.save_video()
-        while self.PoseDetector.cap.isOpened():
-            self.image = self.frame_datas.point_set_import()
+        while self.mp_set.cap.isOpened():
+
+            self.image, self.results, self.mp_pose = self.mp_set.image_setting()
+            self.point_set.results_set(self.results, self.mp_pose)
+            self.point_set.log_key_point()
+            self.point_set.center_point()
+            self.point_set.new_point()
+            self.new_results, self.mp_pose = self.point_set.point_writing()
+
             #frame_data矩陣寫入
-            self.frame = self.frame_datas.record_point()
+            self.frame = self.frame_datas.record_point(self.results, self.mp_pose)
             self.pose_data.append(self.frame)
-            # self.pose_data.append(self.point_data)
+
             # 将帧写入输出视频
             self.out.write(self.image)
             # self.video_point.image_point()
-            self.frame_datas.image_point()
+            self.frame_datas.image_point(self.results, self.new_results, self.mp_pose, self.image)
 
 
             if cv2.waitKey(1) == 27 or (self.start_time > 100 and time.time()
@@ -72,5 +83,4 @@ class implement():
         output_filename = os.path.join(json_folder, f"pose_data.json")
         with open(output_filename, "w", encoding='utf-8') as json_file:
             json.dump(self.pose_data, json_file, indent=4, ensure_ascii=False)
-
 

@@ -1,42 +1,48 @@
-from point_set import p_set
+# from point_set import p_set
 import cv2
 
 class frame_datas():
     def __init__(self):
-        self.point_set = p_set()
+        # self.point_set = p_set()
         self.frame_data_list = []  # 用于存储每一帧的数据
         self.frame_data = None
         self.image = None
+        self.results = None
+        self.new_results = None
+        self.mp_pose =  None
 
-    def point_set_import(self):
-        self.point_set.results_set()
-        self.point_set.log_key_point()
-        self.point_set.center_point()
-        self.point_set.new_point()
-        self.image = self.point_set.image
-        return self.image
 
-    def image_point(self):
-        if self.point_set.results.pose_landmarks:
-            prev_nose_coordinates = (int(self.point_set.nose.x * self.point_set.image_width), int(self.point_set.nose.y * self.point_set.image_height))
-            prev_left_shoulder_coordinates = (int(self.point_set.left_shoulder.x * self.point_set.image_width), int(self.point_set.left_shoulder.y * self.point_set.image_height))
-            prev_right_shoulder_coordinates = (int(self.point_set.right_shoulder.x * self.point_set.image_width), int(self.point_set.right_shoulder.y * self.point_set.image_height))
+    def image_point(self, results, new_results, mp_pose, image):
+        self.results = results
+        self.new_results = new_results
+        self.mp_pose = mp_pose
+        self.image = image
+        image_height, image_width, z = image.shape
 
-            cv2.putText(self.point_set.image, f'Nose (X,Y,Z): ({self.point_set.nose_coordinates[0]:.2f}, {self.point_set.nose_coordinates[1]:.2f}, {self.point_set.nose_coordinates[2]:.2f})',
+        if self.results.pose_landmarks:
+            prev_nose_coordinates = (int(self.results.pose_landmarks.landmark[self.mp_pose.PoseLandmark.NOSE].x * image_width), int(self.results.pose_landmarks.landmark[self.mp_pose.PoseLandmark.NOSE].y * image_height))
+            # nose_text = f'Nose (X,Y,Z): (
+            #     {self.results.pose_landmarks.landmark[self.mp_pose.NOSE.x]:.2f},
+            #     {self.results.pose_landmarks.landmark[self.mp_pose.NOSE.y]:.2f},
+            #     {self.results.pose_landmarks.landmark[self.mp_pose.NOSE.z]:.2f})'
+            # cv2.putText(self.image, nose_text, (prev_nose_coordinates[0] + 10, prev_nose_coordinates[1] + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 165, 255), 1)
+
+            cv2.putText(self.image, f'Nose (X,Y,Z): ({self.results.pose_landmarks.landmark[self.mp_pose.PoseLandmark.NOSE].x:.2f},{self.results.pose_landmarks.landmark[self.mp_pose.PoseLandmark.NOSE].y:.2f},{self.results.pose_landmarks.landmark[self.mp_pose.PoseLandmark.NOSE].z:.2f})',
                             (prev_nose_coordinates[0] + 10, prev_nose_coordinates[1] + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 165, 255), 1)
-            cv2.putText(self.point_set.image, f'Left Shoulder (X,Y,Z): ({self.point_set.left_shoulder_coordinates[0]:.2f}, {self.point_set.left_shoulder_coordinates[1]:.2f}, {self.point_set.left_shoulder_coordinates[2]:.2f})',
-                            (prev_left_shoulder_coordinates[0] + 10, prev_left_shoulder_coordinates[1] + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 165, 255), 1)
-            cv2.putText(self.point_set.image, f'Right Shoulder (X,Y,Z): ({self.point_set.right_shoulder_coordinates[0]:.2f}, {self.point_set.right_shoulder_coordinates[1]:.2f}, {self.point_set.right_shoulder_coordinates[2]:.2f})',
-                            (prev_right_shoulder_coordinates[0] + 10, prev_right_shoulder_coordinates[1] + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 165, 255), 1)
-            cv2.imshow('MediaPipe Pose', self.point_set.image)
+
+            cv2.imshow('MediaPipe Pose', self.image)
 
 
-    def record_point(self):
+    def record_point(self, results, mp_pose):
+        # self.new_results = new_results
+        self.mp_pose = mp_pose
+        self.results = results
+
         self.frame_data = {}  # 为每一帧创建一个新的字典
 
         for i in range(32):  # 用你的实际关键点数量替换2
-            landmark_name = self.point_set.mp_pose.PoseLandmark(i).name
-            landmark_value = self.point_set.results.pose_landmarks.landmark[self.point_set.mp_pose.PoseLandmark(i).value]
+            landmark_name = self.mp_pose.PoseLandmark(i).name
+            landmark_value = self.results.pose_landmarks.landmark[self.mp_pose.PoseLandmark(i).value]
             self.frame_data[landmark_name] = self.landmark_to_dict(landmark_value)
 
         # 将每一帧的数据添加到帧数据列表中

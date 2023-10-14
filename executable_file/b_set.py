@@ -1,4 +1,4 @@
-from a_set import a
+# from a_set import a
 
 class b():
     # image = 0
@@ -10,6 +10,7 @@ class b():
         # b.image = b.image
         print(self.image)
 
-    def set_image(self,a):
-        self.image = a
+    def set_image(self,data):
+        self.image = data.x
+        print(self.image)
         # return self.image

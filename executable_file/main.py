@@ -1,10 +1,17 @@
+<<<<<<< HEAD
 from views import process_pose_estimation
+=======
+from views import *
+>>>>>>> kevin
 import cv2
 from implement_mediapipe import implement
 
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> kevin
 if __name__ == "__main__":
     cap = cv2.VideoCapture(0)
     # 检查摄像头是否成功打开
@@ -28,4 +35,8 @@ if __name__ == "__main__":
 
     # 释放摄像头并关闭窗口
     cap.release()
+<<<<<<< HEAD
     cv2.destroyAllWindows()
+=======
+    cv2.destroyAllWindows()
+>>>>>>> kevin

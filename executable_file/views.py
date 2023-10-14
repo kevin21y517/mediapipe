@@ -18,7 +18,10 @@ prev_right_shoulder_coords = None
 prev_left_knee_coords = None
 prev_right_knee_coords = None
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> kevin
 fig = plt.figure()
 ax = fig.add_subplot(121)
 ax_3d = fig.add_subplot(122, projection='3d')
@@ -115,7 +118,7 @@ def log_key_point(results,image):
         nose_landmark = results.pose_landmarks.landmark[mp_pose.PoseLandmark.NOSE]
         right_foot = results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_FOOT_INDEX]
         left_foot = results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_FOOT_INDEX]
-        
+
 
 
         # 计算新原点的坐标，即左髋和右髋坐标的平均值

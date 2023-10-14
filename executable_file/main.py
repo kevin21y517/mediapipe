@@ -1,12 +1,18 @@
+<<<<<<< HEAD
 from views import process_pose_estimation
 import cv2
 from implement_mediapipe import implement
 
 
+=======
+from views import *
+import cv2
+>>>>>>> main
 
 
 if __name__ == "__main__":
     cap = cv2.VideoCapture(0)
+<<<<<<< HEAD
     # 检查摄像头是否成功打开
     while cap.isOpened():
         success, image = cap.read()
@@ -29,3 +35,30 @@ if __name__ == "__main__":
     # 释放摄像头并关闭窗口
     cap.release()
     cv2.destroyAllWindows()
+=======
+
+    # 检查摄像头是否成功打开
+    if not cap.isOpened():
+        print("无法打开摄像头。请检查连接或驱动程序。")
+    else:
+        while True:
+            success, image = cap.read()
+            if not success:
+                print("无法接收帧。")
+                break
+
+            # 在窗口中显示帧
+            cv2.imshow('Camera', image)
+
+            # 如果按下空格键，则执行姿势估计
+            if cv2.waitKey(1) == 32:  # 空格键的ASCII码是32
+                run_time=30
+                cv2.destroyWindow('Camera')
+                process_pose_estimation(cap, run_time)
+            if cv2.waitKey(1) == 27:
+                break
+
+        # 释放摄像头并关闭窗口
+        cap.release()
+        cv2.destroyAllWindows()
+>>>>>>> main

@@ -19,8 +19,8 @@ if __name__ == "__main__":
         if cv2.waitKey(1) == 32:  # 空格键的ASCII码是32
             run_time=300
             cv2.destroyWindow('Camera')
-            # process_pose_estimation(cap, run_time)
-            implement().process_pose_estimation()
+            process_pose_estimation(cap, run_time)
+
         if cv2.waitKey(1) == 27:
             break
 

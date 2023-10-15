@@ -2,6 +2,8 @@ import cv2
 import mediapipe as mp
 
 
+
+
 class mp_set():
 
     def __init__(self):
@@ -9,8 +11,8 @@ class mp_set():
         self.cap.set(cv2.CAP_PROP_FPS, 60)
         self.mp_pose = mp.solutions.pose
         self.pose = self.mp_pose.Pose(
-            min_detection_confidence=0.7,
-            min_tracking_confidence=0.7)
+            min_detection_confidence=0.1,
+            min_tracking_confidence=0.1)
         self.mp_drawing = mp.solutions.drawing_utils
         self.mp_drawing_styles = mp.solutions.drawing_styles
 
@@ -31,6 +33,7 @@ class mp_set():
             self.results.pose_landmarks,
             self.mp_pose.POSE_CONNECTIONS,
             landmark_drawing_spec = self.mp_drawing_styles.get_default_pose_landmarks_style())
+        return self.image, self.results, self.mp_pose
 
     def picture_set(self):
         self.image = cv2.imread('D:/Kevin_mediapipe/mediapipe/img/xin_c200cm_h0cm.JPG')

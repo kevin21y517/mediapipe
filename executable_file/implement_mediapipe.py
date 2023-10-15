@@ -47,7 +47,7 @@ class implement():
             if cv2.waitKey(1) == 27 or (self.start_time > 100 and time.time()
                 - self.start_time >= self.run_time):
                 # 在程序结束时创建独立的JSON文件
-                self.json_data()
+                self.save_json_data()
                 break
 
         self.out.release()
@@ -67,7 +67,7 @@ class implement():
         return(out)
 
 
-    def json_data(self):
+    def save_json_data(self):
         # 定义要保存 JSON 文件的文件夹路径
         json_folder = "json"
 

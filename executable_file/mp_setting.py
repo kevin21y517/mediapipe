@@ -36,17 +36,18 @@ class mp_set():
         return self.image, self.results, self.mp_pose
 
     def picture_set(self):
-        self.image = cv2.imread('D:/Kevin_mediapipe/mediapipe/img/xin_c200cm_h0cm.JPG')
+        self.image = cv2.imread('img/xin_c200cm_h0cm.JPG')
+        self.image.flags.writeable = False
         self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2RGB)
         self.results = self.pose.process(self.image)
+        self.image.flags.writeable = True
+        self.image = cv2.cvtColor(self.image, cv2.COLOR_RGB2BGR)
         self.mp_drawing.draw_landmarks(
             self.image,
             self.results.pose_landmarks,
             self.mp_pose.POSE_CONNECTIONS,
             landmark_drawing_spec = self.mp_drawing_styles.get_default_pose_landmarks_style())
-
-
-
+        return self.image, self.results, self.mp_pose
 
 
 

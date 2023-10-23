@@ -384,7 +384,7 @@ def three_dimensional_model(image,results,ax,ax_3d):
 
 def json_data(formatted_time_for_filename):
     # 定义要保存 JSON 文件的文件夹路径
-    json_folder = "D:/Kevin_mediapipe/mediapipe/json"
+    json_folder = "/json_old"
 
     # 确保文件夹存在，如果不存在就创建它
     if not os.path.exists(json_folder):

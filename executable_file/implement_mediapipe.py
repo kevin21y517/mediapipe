@@ -54,6 +54,26 @@ class implement():
         cv2.destroyAllWindows()
 
 
+
+    def process_pose_estimation_picture(self):
+        self.image, self.results, self.mp_pose = self.mp_set.picture_set()
+        if self.results is not None:
+            self.point_set.results_set(self.results, self.mp_pose)
+            self.point_set.log_key_point()
+            # self.point_set.center_point()
+            # self.point_set.new_point()
+            self.frame_datas.piont_prev(self.results, self.mp_pose, self.image)
+            self.frame = self.frame_datas.record_point(self.results)
+            self.pose_data.append(self.frame)
+            self.save_json_data()
+        pass
+
+
+
+
+
+
+
     def save_video(self):
         video_folder = "video"
         if not os.path.exists(video_folder):

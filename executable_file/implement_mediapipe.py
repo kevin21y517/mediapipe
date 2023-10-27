@@ -68,10 +68,12 @@ class implement():
             self.save_json_data()
         pass
 
+    def MediaPipe_Face_Iris(self):
+        self.image, self.results_face, self.mp_face_mesh = self.mp_set.face_image_setting()
+        if self.results_face is not None:
+            self.point_set.results_set(self.results_face, self.mp_face_mesh)
 
-
-
-
+        pass
 
 
     def save_video(self):

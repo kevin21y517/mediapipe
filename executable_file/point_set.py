@@ -6,8 +6,10 @@ class p_set():
 
     def __init__(self):
         self.results = None
-        self.new_results = None
         self.mp_pose = None
+
+
+
         self.origin = None
         self.origin_x = None
         self.origin_y = None
@@ -52,6 +54,7 @@ class p_set():
     def results_set(self,results,mp_poses):
         self.results = results
         self.mp_pose = mp_poses
+
 
 
     def log_key_point(self):

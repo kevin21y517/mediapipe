@@ -1,6 +1,6 @@
 import cv2
 import mediapipe as mp
-
+import pykinect_azure as pykinect
 
 
 
@@ -9,6 +9,7 @@ class mp_set():
     def __init__(self):
         self.cap = cv2.VideoCapture(0)
         self.cap.set(cv2.CAP_PROP_FPS, 60)
+
 
         self.mp_pose = mp.solutions.pose
         self.pose = self.mp_pose.Pose(
@@ -45,6 +46,8 @@ class mp_set():
             self.mp_pose.POSE_CONNECTIONS,
             landmark_drawing_spec = self.mp_drawing_styles.get_default_pose_landmarks_style())
         return self.image, self.results, self.mp_pose
+
+
 
     def picture_set(self):
         self.image = cv2.imread('img/xin_c200cm_h0cm.JPG')

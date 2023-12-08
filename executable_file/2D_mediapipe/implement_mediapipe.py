@@ -1,4 +1,5 @@
 from mp_setting import mp_set
+from pyk_setting import pyk_set
 from point_set import p_set
 from frame_data import frame_datas
 import cv2
@@ -9,6 +10,7 @@ import os
 class implement():
     def __init__(self):
         self.mp_set = mp_set()
+        # self.pyk_set = pyk_set()
         self.point_set = p_set()
         self.frame_datas = frame_datas()
         self.frame = None
@@ -26,10 +28,15 @@ class implement():
 
     def process_pose_estimation(self):
         self.out =  self.save_video()
-        while self.mp_set.cap.isOpened():
+        while True:
             self.image, self.results, self.mp_pose = self.mp_set.image_setting()
+            # success = self.pyk_set.pyk_open()
+            # if not success: continue
+            # self.image, self.results, self.mp_pose = self.pyk_set.pyk_setting()
+
             self.point_set.results_set(self.results, self.mp_pose)
             self.point_set.log_key_point()
+
             self.point_set.center_point()
             self.point_set.new_point()
 
@@ -37,7 +44,7 @@ class implement():
             self.results = self.point_set.point_writing()
             self.frame_datas.image_point(self.results)
 
-            #frame_data矩陣寫入
+            # frame_data矩陣寫入
             self.frame = self.frame_datas.record_point(self.results)
             self.pose_data.append(self.frame)
 

@@ -21,7 +21,8 @@ def main():
     device_config.depth_mode = pykinect.K4A_DEPTH_MODE_WFOV_2X2BINNED
 
     # Start device
-    device = pykinect.start_device(config=device_config)
+    video_filename = os.path.join(output_folder, "output.mkv")
+    device = pykinect.start_device(config=device_config, record=True, record_filepath=video_filename)
 
     # Start body tracker
     body_tracker = pykinect.start_body_tracker()
@@ -44,7 +45,7 @@ def main():
             depth_data = {}
             for row in range(depth_image.shape[0]):
                 for col in range(depth_image.shape[1]):
-                    depth_value = int(depth_image[row, col].item())  # 轉換為 int
+                    depth_value = float(depth_image[row, col].item())  # 轉換為 int
                     depth_data[f"pixel_{row}_{col}"] = depth_value
 
             json_filename = os.path.join(output_folder, f"depth_data_{frame_count}.json")

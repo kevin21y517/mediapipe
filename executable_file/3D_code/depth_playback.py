@@ -4,7 +4,7 @@ import pykinect_azure as pykinect
 
 if __name__ == "__main__":
 
-    video_filename = "output_data_2023-12-07_141316/output.mkv"
+    video_filename = "depth_image_data/output_data_2023-12-08_234567/output.mkv"
 
     # Initialize the library, if the library is not found, add the library path as argument
     pykinect.initialize_libraries()

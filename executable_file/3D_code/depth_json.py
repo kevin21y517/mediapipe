@@ -4,7 +4,7 @@ import json
 import pykinect_azure as pykinect
 
 if __name__ == "__main__":
-    file = "output_data_2023-12-08_234567"
+    file = "output_data_2023-12-08_678900"
     video_filename = f"depth_image_data/{file}/output.mkv"
     output_folder = f"depth_image_data/{file}"
     frame_count = 0
@@ -47,7 +47,7 @@ if __name__ == "__main__":
             for row in range(depth_color_image.shape[0]):
                 for col in range(depth_color_image.shape[1]):
                     depth_value = depth_color_image[row, col][0]  # Access the correct element
-                    depth_data[f"pixel_{row}_{col}"] = int(depth_value)
+                    depth_data[f"pixel_{row}_{col}"] = float(depth_value)
 
             json_filename = os.path.join(output_folder, f"depth_data_{frame_count}.json")
             with open(json_filename, 'w') as json_file:

@@ -1,5 +1,5 @@
 import cv2
-
+import time
 import pykinect_azure as pykinect
 
 if __name__ == "__main__":
@@ -16,6 +16,8 @@ if __name__ == "__main__":
     # print(playback_config)
 
     cv2.namedWindow('Depth Image', cv2.WINDOW_NORMAL)
+
+    delay = 0.145  # 延遲時間（秒）
     while True:
 
         # Get camera capture
@@ -36,6 +38,8 @@ if __name__ == "__main__":
         # Plot the image
         combined_image = cv2.addWeighted(color_image[:, :, :3], 1.0, depth_color_image, 0.0, 0)
         cv2.imshow('Depth Image', combined_image)
+
+        time.sleep(delay)
 
         # Press q key to stop
         if cv2.waitKey(1) == 27:

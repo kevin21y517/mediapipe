@@ -1,13 +1,15 @@
 import cv2
 import os
-import json
 import pykinect_azure as pykinect
 import datetime
+import time
 
 def main():
     # Initialize the library, if the library is not found, add the library path as an argument
     pykinect.initialize_libraries(track_body=True)
 
+    run_time = 30
+    start_time = time.time()
     frame_count = 0
     current_datetime = datetime.datetime.now()
     formatted_time_for_filename = current_datetime.strftime("%Y-%m-%d_%H%M%S")
@@ -41,7 +43,8 @@ def main():
         frame_count += 1
 
         # Press q key to stop
-        if cv2.waitKey(1) == 27:
+        if cv2.waitKey(1) == 27 or (start_time > 100 and time.time()
+                - start_time >= run_time):
             break
 
     cv2.destroyAllWindows()

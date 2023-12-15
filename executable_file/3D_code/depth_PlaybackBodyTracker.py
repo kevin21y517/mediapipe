@@ -21,6 +21,7 @@ if __name__ == "__main__":
 	# Start body tracker
 	bodyTracker = pykinect.start_body_tracker(calibration=playback_calibration)
 
+
 	cv2.namedWindow('Depth image with skeleton',cv2.WINDOW_NORMAL)
 	while True:
 

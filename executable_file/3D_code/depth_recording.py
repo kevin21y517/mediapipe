@@ -8,7 +8,7 @@ def main():
     # Initialize the library, if the library is not found, add the library path as an argument
     pykinect.initialize_libraries(track_body=True)
 
-    run_time = 30
+    run_time = 20
     start_time = time.time()
     frame_count = 0
     current_datetime = datetime.datetime.now()
@@ -23,7 +23,7 @@ def main():
     device_config.depth_mode = pykinect.K4A_DEPTH_MODE_WFOV_2X2BINNED
 
     # Start device
-    video_filename = os.path.join(output_folder, "output.mkv")
+    video_filename = os.path.join(output_folder, "output_.mkv")
     device = pykinect.start_device(config=device_config, record=True, record_filepath=video_filename)
 
     # Start body tracker
@@ -33,12 +33,16 @@ def main():
         # Get capture
         capture = device.update()
 
+        ret_color, color_image = capture.get_transformed_color_image()
+        ret_depth, depth_color_image = capture.get_colored_depth_image()
+
         # Get the depth image
         ret_depth, depth_image = capture.get_depth_image()
 
         # Display depth image with depth values
-        depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
-        cv2.imshow('Depth Image with Values', depth_colormap)
+        # depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
+        combined_image = cv2.addWeighted(color_image[:, :, :3], 0.9, depth_color_image, 0.1, 0)
+        cv2.imshow('Depth Image with Values', combined_image)
 
         frame_count += 1
 

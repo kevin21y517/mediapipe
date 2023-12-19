@@ -1,3 +1,4 @@
+#未完成
 import cv2
 import os
 import pykinect_azure as pykinect

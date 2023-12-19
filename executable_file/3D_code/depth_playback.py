@@ -3,8 +3,10 @@ import time
 import pykinect_azure as pykinect
 
 if __name__ == "__main__":
-    file = "output_data_2023-12-08_234567"
+    file = "output_data_2023-12-18_155451"
+    num = 1
     video_filename = f"depth_image_data/{file}/output.mkv"
+    # video_filename = f"depth_image_data/{file}/output{num}.mkv"
 
     # Initialize the library, if the library is not found, add the library path as argument
     pykinect.initialize_libraries()

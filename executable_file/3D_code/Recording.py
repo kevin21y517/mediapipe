@@ -2,7 +2,7 @@ import cv2
 import os
 import pykinect_azure as pykinect
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(2)
 video_folder = "video"
 if not os.path.exists(video_folder):
     os.makedirs(video_folder)
@@ -16,7 +16,7 @@ out = cv2.VideoWriter(output_filename, fourcc, 20.0, (640, 480))  #偵率
 while True:
     success, image = cap.read()
     cv2.imshow('MediaPipe Pose', image)
-    success = out.write(image)
+    out.write(image)
     if not success:
         print("Failed to write image to video.")
 

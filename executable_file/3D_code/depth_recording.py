@@ -32,11 +32,13 @@ class Recording():
         line_thickness = 2
 
         frame_rate = self.frame_count / self.elapsed_time
+        elapsed_time_str = f"duration: {self.elapsed_time} second"
         frame_rate_str = f"Frame rate: {frame_rate:.2f} fps"
 
         while True:
             image = np.zeros((400, 600, 3), dtype=np.uint8)  # Create a black image
-            cv2.putText(image, frame_rate_str, (10, 30), font, font_scale, font_color, line_thickness, cv2.LINE_AA)
+            cv2.putText(image, elapsed_time_str , (10, 30), font, 0.7, font_color, 1, cv2.LINE_AA)
+            cv2.putText(image, frame_rate_str , (10, 60), font, 0.7, font_color, 1, cv2.LINE_AA)
             cv2.putText(image, text, position, font, font_scale, font_color, line_thickness, cv2.LINE_AA)
             cv2.imshow(window_name, image)
 

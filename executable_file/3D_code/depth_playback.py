@@ -3,10 +3,10 @@ import time
 import pykinect_azure as pykinect
 
 if __name__ == "__main__":
-    file = "output_data_2023-12-19_213144"
-    num = 2
-    # video_filename = f"depth_image_data/{file}/output.mkv"
-    video_filename = f"depth_image_data/{file}/output_{num}.mkv"
+    file = "output_data_2023-12-29_204909"
+    num = "123"
+    video_filename = f"output.mkv"
+    # video_filename = f"depth_image_data/{file}/{num}_output.mkv"
 
     # Initialize the library, if the library is not found, add the library path as argument
     pykinect.initialize_libraries()
@@ -41,7 +41,7 @@ if __name__ == "__main__":
         combined_image = cv2.addWeighted(color_image[:, :, :3], 1.0, depth_color_image, 0.0, 0)
         cv2.imshow('Depth Image', combined_image)
 
-        time.sleep(delay)
+        # time.sleep(delay)
 
         # Press q key to stop
         if cv2.waitKey(1) == 27:

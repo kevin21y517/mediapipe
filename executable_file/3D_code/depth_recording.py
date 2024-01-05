@@ -10,6 +10,7 @@ class Recording():
     def __init__(self):
         self.frame_count = None
         self.elapsed_time = None
+        self.frame_rate = None
         self.should_exit = False
         self.ID = 1
         self.current_datetime = datetime.datetime.now()
@@ -31,9 +32,9 @@ class Recording():
         font_color = (255, 255, 255)
         line_thickness = 2
 
-        frame_rate = self.frame_count / self.elapsed_time
+        self.frame_rate = self.frame_count / self.elapsed_time
         elapsed_time_str = f"duration: {self.elapsed_time} second"
-        frame_rate_str = f"Frame rate: {frame_rate:.2f} fps"
+        frame_rate_str = f"Frame rate: {self.frame_rate:.2f} fps"
 
         while True:
             image = np.zeros((400, 600, 3), dtype=np.uint8)  # Create a black image
@@ -67,7 +68,7 @@ class Recording():
         device_config.color_resolution = pykinect.K4A_COLOR_RESOLUTION_1080P
         device_config.depth_mode = pykinect.K4A_DEPTH_MODE_NFOV_2X2BINNED
 
-        video_filename = os.path.join(self.output_folder, f"{self.ID}_output.mkv")
+        video_filename = os.path.join(self.output_folder, f"{self.ID}_output_{self.elapsed_time}_{self.frame_rate}.mkv")
         device = pykinect.start_device(config=device_config, record=True, record_filepath=video_filename)
         cv2.namedWindow('Depth Image with Values', cv2.WINDOW_NORMAL)
 
